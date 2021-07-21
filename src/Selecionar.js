@@ -7,6 +7,10 @@ import './form_main.css'
 import form_main from './form_main'
 import Formulario from './form_main';
 import Conjuge from './conjuge'
+import Companheiro from './Companheiro'
+import EXCompanheiro from './Ex-Companheiro'
+
+import {Route, Switch, Redirect, BrowserRouter, Link } from 'react-router-dom';
 
 
 const { Option } = Select;
@@ -130,7 +134,14 @@ handlechangeCPF(e) {
 <Conjuge/>
     
 }
-
+{this.state.tp_form == 'Companheiro' &&
+<Companheiro/>
+    
+}
+{this.state.tp_form == 'Ex-Companheiro' &&
+<EXCompanheiro/>
+    
+}
 <br/>
 <> </>
 <> </>

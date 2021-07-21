@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './CadSucesso.css'
+import {Route, Switch, Redirect, BrowserRouter, Link } from 'react-router-dom';
 
 
 class CadSucesso extends Component {

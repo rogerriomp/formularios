@@ -69,13 +69,13 @@ const props = {
   
 
 
-class conjuge extends React.Component {
+class Companheiro extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
             token:"",
 
-            tp_form: 'Cônjuge',
+            tp_form: 'Companheiro',
             matricula:'',
 
             status: 'Ag. Atendimento',
@@ -174,41 +174,60 @@ enviar(){
             if(json.lista_arquivos !== null){
 
                 if(this.state.poder !== '' && this.state.procurador_rep !== ''){
+                    // lista de anexos obrigatórios - Companheiro
                     let anexos_obrigatorios = [
-                    'req.form.iprev',
-                    'certidao.obito',
-                    'carteira.identidade.req',
-                    'carteira.identidade.ins',
-                    'cpf.requerente',
-                    'cpf.ins',
-                    'certidao.casamento',
-                    'comprovante.residencia.req',
-                    'comprovante.residencia.ins',
-                    'declaracao.acumulacao.beneficios',
-                    'comprovante.cc',
-                    'declaracao.inss'
+                        'req.form.iprev',
+                        'certidao.obito',
+                        'carteira.identidade.req',
+                        'carteira.identidade.ins',
+                        'cpf.requerente',
+                        'cpf.ins',
+                        'declaracao.convivio.posmortem',
+                        'comprovante.convivio',
+                        'comprovante.residencia.exsegurado',
+                        'comprovante.residencia.requerente',
+                        'declaracao.acumulacao.beneficios',
+                        'comprovante.conta.corrente',
+                        'declaracao.beneficios.inss'
                     ]
+                    // Cria lista de anexos obrigatórios
                     if(this.state.poder ===  "Assembléia Legislativa"|| this.state.poder === "Militar" || this.state.poder === "TCE/SC" || this.state.poder === "TJ-SC"){
                         
-                        anexos_obrigatorios.push("contracheques")
+                        anexos_obrigatorios.push("tres.ultimos.contracheques")
                     
                     }if(this.state.poder === "Poder Executivo" ||  this.state.poder === "Ministério Público"){
-                        anexos_obrigatorios.push("ultimo.contracheque.ex.mp")
+                        anexos_obrigatorios.push("ultimo.contracheque")
                     
                     }if(this.state.servidor_ativo === 'sim'){
-                        anexos_obrigatorios.push("ficha.funcional")
+                        anexos_obrigatorios.push("seg.ativo.dataobto")
                     
                     }if(this.state.servidor_ativo === 'não'){
-                        anexos_obrigatorios.push("segurado.inativo.dt.obto")
+                        anexos_obrigatorios.push("seg.inativo.dataobto")
                     
                     }if(this.state.adq_convenio_sc_saude === 'sim'){
-                        anexos_obrigatorios.push("formulario.sc.saude")
+                        anexos_obrigatorios.push("form.adesao.scsaude")
                     
                     }if(this.state.req_recebe_pens_aposen === 'sim'){
-                        anexos_obrigatorios.push("comprovante.recebimento.beneficio")
+                        anexos_obrigatorios.push("comprovante.recebi.beneficio")
+                    
+                    }if(this.state.req_ja_casado === 'sim'){
+                        anexos_obrigatorios.push("certidao.casamento.requerente")
+                    
+                    }if(this.state.ex_servidor_ja_casado === 'sim'){
+                        anexos_obrigatorios.push("certidao.casamento")
+                    
+                    }if(this.state.filhos_uniao === 'sim'){
+                        anexos_obrigatorios.push("certidao.nascimento.filhos")
+                    
+                    }if(this.state.uniao_estavel === 'sim'){
+                        anexos_obrigatorios.push("uniao_estavel")
+                    
+                    }if(this.state.procurador_rep === 'sim'){
+                        anexos_obrigatorios.push("doc.identificacao.cpf.procurador")
+                        anexos_obrigatorios.push("procuracao.publica.dependente")
                     
                     }
-                    // Validação dos campos
+                    // Validação dos campos instituidor
                     
                     
                                 if(this.state.nome_seg === '' ||
@@ -225,7 +244,8 @@ enviar(){
                                 this.state.cep === '' ||
                                 this.state.org_origem === '' ||
                                 this.state.sexo === '' ||
-                                this.state.cargo === ''){
+                                this.state.cargo === '' ||
+                                this.state.ex_servidor_ja_casado ===''){
                     
                                 alert('Os campos relacionados aos dados do Instituidor estão incompletos, complete o preenchimento para realizar o envio' )
                                 return;
@@ -244,6 +264,7 @@ enviar(){
                                 
                     
                                 }}
+                                // Valida preenchimento dados requerente
                                 if(this.state.nome_completo_req === ''||
                                 this.state.dt_nascimento_req === ''||
                                 this.state.telefone_req === ''||
@@ -258,11 +279,17 @@ enviar(){
                                 this.state.conta_banq_req === ''||
                                 this.state.adq_convenio_sc_saude === ''||
                                 this.state.nome_mae_req === ''||
-                                this.state.req_recebe_pens_aposen === ''){
+                                this.state.req_recebe_pens_aposen === ''||
+                                this.state.req_ja_casado === '' ||
+                                this.state.filhos_uniao === '' ||
+                                this.state.uniao_estavel === '' 
+                                
+                                ){
                                 alert('Os campos relacionados aos dados do Requerente estão incompletos, complete o preenchimento para realizar o envio' )
                                 return; 
                     
                                 }
+                                //Valida campos procurador
                                 if(this.state.procurador_rep==='sim'){if(
                                     this.state.nome_procurador === ''||
                                     this.state.cpf_procurador === ''||
@@ -647,6 +674,16 @@ handlechangeCPF_procurador(e) {
             onChange={(e) => { this.setState({ 'cargo': e.target.value }) }}
         />
     </th>
+    <th>
+                        
+    O Ex-servidor já foi casado?:<br/>
+                        <Select style={{ width: 200 }} onChange={e => {this.setState({ex_servidor_ja_casado: e})}}>
+      <Option value="sim">Sim</Option>
+      <Option value="não">Não</Option>
+      </Select>
+
+
+                            </th>
                 </tr>
 
         </table>
@@ -852,8 +889,32 @@ handlechangeCPF_procurador(e) {
     </Select>
     </th>
                     </tr>
-                
+                    <tr>
+                        <th>
+                            <br/>
+      O Requerente já foi casado?:<br/>
+                        <Select style={{ width: 200 }} onChange={e => {this.setState({req_ja_casado: e})}}>
+      <Option value="sim">Sim</Option>
+      <Option value="não">Não</Option>
+      </Select>
+      </th><th>
+      Nasceram filhos da<br/> 
+      união com o ex-servidor?:<br/>
+                        <Select style={{ width: 200 }} onChange={e => {this.setState({filhos_uniao: e})}}>
+      <Option value="sim">Sim</Option>
+      <Option value="não">Não</Option>
+      </Select></th>
+      <th>
 
+      Certidão Declaratória de União Estável<br/>Contrato de União Estável (Companheiro)?:<br/>
+                        <Select style={{ width: 200 }} onChange={e => {this.setState({uniao_estavel: e})}}>
+      <Option value="sim">Sim</Option>
+      <Option value="não">Não</Option>
+      </Select>
+      </th>
+
+</tr>
+                
         </table>
              
              </div>
@@ -1012,10 +1073,10 @@ handlechangeCPF_procurador(e) {
     </Upload>
             </th>
         </tr>
-    
+    { this.state.ex_servidor_ja_casado == 'sim' &&
         <tr>
         <th>
-        Certidão de Casamento atualizada pós óbito (frente e verso)
+        Certidão de Casamento atualizada pós óbito (frente e verso) do  Ex-Segurado
             </th>
         <th>
         <Upload {...props}
@@ -1025,57 +1086,59 @@ handlechangeCPF_procurador(e) {
     </Upload>
             </th>
         </tr>
-    
+    }
+    { this.state.req_ja_casado == 'sim' &&
         <tr>
         <th>
-        Comprovante de residência em nome do(a) requerente: luz ou água ou telefone (últimos 6 meses)
+        Certidão de Casamento atualizada pós óbito (frente e verso) do  Requerente						
             </th>
         <th>
         <Upload {...props}
-        data = {{'token': this.state.token, 'tp_form':'comprovante.residencia.req'}}
-        >
-      <Button icon={<UploadOutlined />}>Upload</Button>
-    </Upload>
-            </th>
-        </tr>
-    
-   
-        <tr>
-        <th>
-        Comprovante de residência em nome do(a)Ex-Segurado(a):  luz ou água ou telefone (últimos 6 meses)
-            </th>
-        <th>
-        <Upload {...props}
-        data = {{'token': this.state.token, 'tp_form':'comprovante.residencia.ins'}}
-        >
-      <Button icon={<UploadOutlined />}>Upload</Button>
-    </Upload>
-            </th>
-        </tr>
-    
-    {(this.state.poder ===  "Assembléia Legislativa"|| this.state.poder === "Militar" || this.state.poder === "TCE/SC" || this.state.poder === "TJ-SC") &&
-        <tr>
-        <th>
-        Informação do(a) instituidor(a) da pensão (quando tratar-se de ex-servidor de órgão externo: <br/>
-        Tribunal de Justiça, Tribunal de Contas, etc...), conforme formulário do IPREV
-            </th>
-        <th>
-        <Upload {...props}
-        data = {{'token': this.state.token, 'tp_form':'informa.inst.ext'}}
+        data = {{'token': this.state.token, 'tp_form':'certidao.casamento.requerente'}}
         >
       <Button icon={<UploadOutlined />}>Upload</Button>
     </Upload>
             </th>
         </tr>
     }
-    {this.state.adq_convenio_sc_saude === 'sim' &&
+    { this.state.combo_vazio == '' &&
+   
         <tr>
         <th>
-        Formulário Adesão SC Saúde (segurado(a) associado(a)
+        Certidão de Nascimento atualizada pós óbito (frente e verso) do Ex-segurado						
             </th>
         <th>
         <Upload {...props}
-        data = {{'token': this.state.token, 'tp_form':'formulario.sc.saude'}}
+        data = {{'token': this.state.token, 'tp_form':'certidao.nascimento.exsegurado'}}
+        >
+      <Button icon={<UploadOutlined />}>Upload</Button>
+    </Upload>
+            </th>
+        </tr>
+    }
+    { this.state.combo_vazio == '' &&
+           <tr>
+        <th>
+        Certidão de Nascimento atualizada pós óbito (frente e verso) do Requerente
+            </th>
+        <th>
+        <Upload {...props}
+        data = {{'token': this.state.token, 'tp_form':'certidao.nascimento.requerente'}}
+        >
+      <Button icon={<UploadOutlined />}>Upload</Button>
+    </Upload>
+            </th>
+        </tr>
+        }
+    
+    { this.state.filhos_uniao == 'sim' &&
+        <tr>
+        <th>
+        Certidão de Nascimento e CPF dos filhos havidos da união						
+            </th>
+        <th>
+        <Upload {...props}
+        data = {{'token': this.state.token, 'tp_form':'certidao.nascimento.filhos'}}
         >
       <Button icon={<UploadOutlined />}>Upload</Button>
     </Upload>
@@ -1085,7 +1148,119 @@ handlechangeCPF_procurador(e) {
  
         <tr>
         <th>
-        Declaração de Acumulação de benefícios (cfe modelo IPREV)
+        Declaração de Convívio Marital Post Mortem						
+            </th>
+        <th>
+        <Upload {...props}
+        data = {{'token': this.state.token, 'tp_form':'declaracao.convivio.posmortem'}}
+        >
+      <Button icon={<UploadOutlined />}>Upload</Button>
+    </Upload>
+            </th>
+        </tr>
+    
+        { this.state.uniao_estavel == 'sim' &&
+        <tr>
+        <th>
+        Certidão Declaratória de União Estável/Contrato de União Estável						
+            </th>
+        <th>
+        <Upload {...props}
+        data = {{'token': this.state.token, 'tp_form':'certidao.uniao.estavel'}}
+        >
+      <Button icon={<UploadOutlined />}>Upload</Button>
+    </Upload>
+            </th>
+        </tr>
+        }
+    
+    
+        <tr>
+        <th>
+        Documentos que comprovem convívio marital (fotos, conta bancária conjunta, <br/>
+        correspondência com mesmo endereço, Obs. Devem ser apresentados o maior número possivel de documentos <br/>
+        que comprovem a vida em comum, tanto com datas atuais como com datas no inicio da relação, isso será de grande relevância <br/>
+        para a análise.)						
+            </th>
+        <th>
+        <Upload {...props}
+        data = {{'token': this.state.token, 'tp_form':'comprovante.convivio'}}
+        >
+      <Button icon={<UploadOutlined />}>Upload</Button>
+    </Upload>
+            </th>
+        </tr>
+        <tr>
+        <th>
+        Comprovante de residência em nome do(a) Ex-Segurado(a): luz ou água ou telefone (últimos 6 meses)						
+            </th>
+        <th>
+        <Upload {...props}
+        data = {{'token': this.state.token, 'tp_form':'comprovante.residencia.exsegurado'}}
+        >
+      <Button icon={<UploadOutlined />}>Upload</Button>
+    </Upload>
+            </th>
+        </tr>
+        <tr>
+        <th>
+        Comprovante de residência em nome do(a) requerente: luz ou água ou telefone (últimos 6 meses)						
+            </th>
+        <th>
+        <Upload {...props}
+        data = {{'token': this.state.token, 'tp_form':'comprovante.residencia.requerente'}}
+        >
+      <Button icon={<UploadOutlined />}>Upload</Button>
+    </Upload>
+            </th>
+        </tr>
+    
+    { (this.state.poder ===  "Assembléia Legislativa"|| this.state.poder === "Militar" || this.state.poder === "TCE/SC" || this.state.poder === "TJ-SC") &&
+        <tr>
+        <th>
+        Informação do(a) instituidor(a) da pensão (quando tratar-se de ex-servidor de órgão externo: <br/>
+        Tribunal de Justiça, Tribunal de Contas, etc...), conforme formulário do IPREV
+            </th>
+        <th>
+        <Upload {...props}
+        data = {{'token': this.state.token, 'tp_form':'info.exinstituidor'}}
+        >
+      <Button icon={<UploadOutlined />}>Upload</Button>
+    </Upload>
+            </th>
+        </tr>}
+        { this.state.adq_convenio_sc_saude=='sim' &&  
+        <tr>
+        <th>
+       
+        Formulário Adesão SC Saúde (segurado(a) associado(a)						
+            </th>
+        <th>
+        <Upload {...props}
+        data = {{'token': this.state.token, 'tp_form':'form.adesao.scsaude'}}
+        >
+      <Button icon={<UploadOutlined />}>Upload</Button>
+    </Upload>
+            </th>
+        </tr>
+        }
+            
+        <tr>
+        <th>
+        Comprovação de Dependência SC Saúde
+            </th>
+        <th>
+        <Upload {...props}
+        data = {{'token': this.state.token, 'tp_form':'comprovacao.dependencia.scsaude'}}
+        >
+      <Button icon={<UploadOutlined />}>Upload</Button>
+    </Upload>
+            </th>
+        </tr>
+    
+        <tr>
+        <th>
+        Declaração de Acumulação de benefícios (cfe modelo IPREV)						
             </th>
         <th>
         <Upload {...props}
@@ -1096,133 +1271,138 @@ handlechangeCPF_procurador(e) {
             </th>
         </tr>
     
-
+ 
         <tr>
         <th>
         Comprovação de Conta Corrente Individual no Banco do Brasil (ag. c/c)(Contrato ou Declaração do Banco)
             </th>
         <th>
         <Upload {...props}
-        data = {{'token': this.state.token, 'tp_form':'comprovante.cc'}}
+        data = {{'token': this.state.token, 'tp_form':'comprovante.conta.corrente'}}
         >
       <Button icon={<UploadOutlined />}>Upload</Button>
     </Upload>
             </th>
         </tr>
     
-    {this.state.req_recebe_pens_aposen === 'sim' &&
-        <tr>
+        { this.state.req_recebe_pens_aposen == 'sim' &&
+<tr>
         <th>
-        Comprovante de Recebimento de Benefício Previdenciário (não sendo aceito extrato bancário)
+        Comprovante de Recebimento de Benefício Previdenciário (não sendo aceito extrato bancário)						
             </th>
         <th>
         <Upload {...props}
-        data = {{'token': this.state.token, 'tp_form':'comprovante.recebimento.beneficio'}}
+        data = {{'token': this.state.token, 'tp_form':'comprovante.recebi.beneficio'}}
         >
       <Button icon={<UploadOutlined />}>Upload</Button>
     </Upload>
             </th>
         </tr>
-    }
-  
+        }
+
         <tr>
         <th>
         Declaração de Benefícios do INSS
             </th>
         <th>
         <Upload {...props}
-        data = {{'token': this.state.token, 'tp_form':'declaracao.inss'}}
+        data = {{'token': this.state.token, 'tp_form':'declaracao.beneficios.inss'}}
         >
       <Button icon={<UploadOutlined />}>Upload</Button>
     </Upload>
             </th>
         </tr>
-    
-    {this.state.servidor_ativo === 'sim' &&
+        { this.state.servidor_ativo == 'sim' &&
         <tr>
         <th>
         Segurado ativo à data do óbito: ficha funcional (autenticada pelo órgão expedidor)
             </th>
         <th>
         <Upload {...props}
-        data = {{'token': this.state.token, 'tp_form':'ficha.funcional'}}
+        data = {{'token': this.state.token, 'tp_form':'seg.ativo.dataobto'}}
         >
       <Button icon={<UploadOutlined />}>Upload</Button>
     </Upload>
             </th>
         </tr>
-    }
-    {this.state.servidor_ativo === 'não' &&
+        }
+        { this.state.servidor_ativo == 'não' &&
+
         <tr>
         <th>
         Segurado inativo à data do óbito: ato de aposentadoria (autenticado pelo órgão expedidor)
             </th>
         <th>
         <Upload {...props}
-        data = {{'token': this.state.token, 'tp_form':'segurado.inativo.dt.obto'}}
-        >
-      <Button icon={<UploadOutlined />}>Upload</Button>
-    </Upload>
-            </th>
-        </tr>}
-        {(this.state.poder ===  "Assembléia Legislativa"|| this.state.poder === "Militar" || this.state.poder === "TCE/SC" || this.state.poder === "TJ-SC") &&
-        <tr>
-        <th>
-        Três últimos contracheques (quando tratar-se de ex-servidor de órgão externo: <br/>
-        (Tribunal de Justiça, Tribunal de Contas, etc...)
-            </th>
-        <th>
-        <Upload {...props}
-        data = {{'token': this.state.token, 'tp_form':'contracheques'}}
+        data = {{'token': this.state.token, 'tp_form':'seg.inativo.dataobto'}}
         >
       <Button icon={<UploadOutlined />}>Upload</Button>
     </Upload>
             </th>
         </tr>
-    }
-            {(this.state.poder === "Poder Executivo" ||  this.state.poder === "Ministério Público") &&
+        }
+        { (this.state.poder === "Poder Executivo" ||  this.state.poder === "Ministério Público") &&
         <tr>
         <th>
-        Último contracheque, caso ex-segurado do Poder Executivo ou Ministério Público : <br/>
+        (01) Último contracheque, caso ex-segurado do Poder Executivo ou Ministério Público
             </th>
         <th>
         <Upload {...props}
-        data = {{'token': this.state.token, 'tp_form':'ultimo.contracheque.ex.mp'}}
+        data = {{'token': this.state.token, 'tp_form':'ultimo.contracheque'}}
         >
       <Button icon={<UploadOutlined />}>Upload</Button>
     </Upload>
             </th>
         </tr>
-    }
-{this.state.procurador_rep === 'sim' &&
+        }
+
+{ (this.state.poder ===  "Assembléia Legislativa"|| this.state.poder === "Militar" || this.state.poder === "TCE/SC" || this.state.poder === "TJ-SC") &&
         <tr>
         <th>
-        Procuração Pública (dependente representado por procurador) ou Termo de Curatela  <br/>
+        (03)Três últimos contracheques (quando tratar-se de ex-servidor de órgão externo: <br/>
+        (Tribunal de Justiça, Tribunal de Contas, ALESC)
+            </th>
+        <th>
+        <Upload {...props}
+        data = {{'token': this.state.token, 'tp_form':'tres.ultimos.contracheques'}}
+        >
+      <Button icon={<UploadOutlined />}>Upload</Button>
+    </Upload>
+            </th>
+        </tr>
+}
+
+{ this.state.procurador_rep === 'sim' == '' &&
+        <tr>
+        <th>
+        Procuração Pública (dependente representado por procurador) ou Termo de Curatela <br/>
         (dependente representado por curador) ou Termo de Tutela (dependente representado por Tutor)
             </th>
         <th>
         <Upload {...props}
-        data = {{'token': this.state.token, 'tp_form':'procuracao'}}
+        data = {{'token': this.state.token, 'tp_form':'procuracao.publica.dependente'}}
         >
       <Button icon={<UploadOutlined />}>Upload</Button>
     </Upload>
             </th>
         </tr>
-    }
-    {this.state.procurador_rep === 'sim'  &&
+}
+
+{ this.state.procurador_rep === 'sim' &&
         <tr>
         <th>
         Documento de identificação e CPF do procurador/curador/tutor
             </th>
         <th>
         <Upload {...props}
-        data = {{'token': this.state.token, 'tp_form':'identificacao.cpf'}}
+        data = {{'token': this.state.token, 'tp_form':'doc.identificacao.cpf.procurador'}}
         >
       <Button icon={<UploadOutlined />}>Upload</Button>
     </Upload>
             </th>
         </tr>
-    }
+        }
+
     </table>
 
 
@@ -1248,4 +1428,4 @@ handlechangeCPF_procurador(e) {
     }
 }
 
-export default conjuge;
+export default Companheiro;

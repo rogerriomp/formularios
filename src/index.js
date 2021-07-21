@@ -6,6 +6,7 @@ import reportWebVitals from './reportWebVitals';
 
 import Start from './Start'
 import * as serviceWorker from './serviceWorker';
+import {Route, Switch, Redirect, BrowserRouter, Link } from 'react-router-dom';
 
 ReactDOM.render(
   <React.StrictMode>

@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { BrowserRouter } from 'react-router-dom'
 import Routes from './Router';
+import {Route, Switch, Redirect, Link } from 'react-router-dom';
 
 class Start extends Component {
     constructor(props) {
