@@ -52,7 +52,7 @@ const dateFormatList = ['DD/MM/YYYY', 'DD/MM/YY'];
 const props = {
     name: 'file',
     multiple: true,
-    action: 'http://127.0.0.1:5000/file-upload',
+    action: 'http://10.111.10.154:5000/file-upload',
     onChange(info) {
       const { status } = info.file;
       if (status !== 'uploading') {
