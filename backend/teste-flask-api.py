@@ -140,8 +140,9 @@ def create_folder(name):
 
 
 @app.route('/file-upload', methods=['POST', 'OPTIONS'])
-@cross_origin(origin="http://localhost:3000",headers=['Content- Type','Authorization'])
+#@cross_origin(origin="http://localhost:3000",headers=['Content- Type','Authorization'])
 # @cross_origin(origin="http://localhost:2000",headers=['Content- Type','Authorization'])
+@cross_origin()
 def upload_file():
     
     
