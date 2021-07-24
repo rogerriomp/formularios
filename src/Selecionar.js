@@ -9,6 +9,7 @@ import Formulario from './form_main';
 import Conjuge from './conjuge'
 import Companheiro from './Companheiro'
 import EXCompanheiro from './Ex-Companheiro'
+import EXconjuge from './EXconjuge';
 
 import {Route, Switch, Redirect, BrowserRouter, Link } from 'react-router-dom';
 
@@ -141,6 +142,9 @@ handlechangeCPF(e) {
 {this.state.tp_form == 'Ex-Companheiro' &&
 <EXCompanheiro/>
     
+}
+{this.state.tp_form == 'Ex-Cônjuje' &&
+  <EXconjuge/>
 }
 <br/>
 <> </>

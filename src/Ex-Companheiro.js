@@ -229,6 +229,10 @@ enviar(){
                         anexos_obrigatorios.push("doc.identificacao.cpf.procurador")
                         anexos_obrigatorios.push("procuracao.publica.dependente")
                     
+                    }if(this.state.tp_doc_separacao_divorcio == 'Decisão Judicial'){
+                        anexos_obrigatorios.push("carta.sentenca.recebimento.pensao")
+                    }if(this.state.tp_doc_separacao_divorcio == 'Escritura'){
+                        anexos_obrigatorios.push("escritura.publica.dissolucao")
                     }
                     // Validação dos campos instituidor
                     
@@ -1344,10 +1348,10 @@ handlechangeCPF_procurador(e) {
         </tr>
 }
 
-{ this.state.procurador_rep === 'sim' == '' &&
+{this.state.procurador_rep === 'sim' &&
         <tr>
         <th>
-        Procuração Pública (dependente representado por procurador) ou Termo de Curatela <br/>
+        Procuração Pública (dependente representado por procurador) ou Termo de Curatela  <br/>
         (dependente representado por curador) ou Termo de Tutela (dependente representado por Tutor)
             </th>
         <th>
@@ -1358,9 +1362,8 @@ handlechangeCPF_procurador(e) {
     </Upload>
             </th>
         </tr>
-}
-
-{ this.state.procurador_rep === 'sim' &&
+    }
+    {this.state.procurador_rep === 'sim'  &&
         <tr>
         <th>
         Documento de identificação e CPF do procurador/curador/tutor
@@ -1373,7 +1376,7 @@ handlechangeCPF_procurador(e) {
     </Upload>
             </th>
         </tr>
-        }
+    }
 
     </table>
 

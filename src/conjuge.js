@@ -207,6 +207,10 @@ enviar(){
                     }if(this.state.req_recebe_pens_aposen === 'sim'){
                         anexos_obrigatorios.push("comprovante.recebimento.beneficio")
                     
+                    }if(this.state.procurador_rep === 'sim'){
+                        anexos_obrigatorios.push("doc.identificacao.cpf.procurador")
+                        anexos_obrigatorios.push("procuracao.publica.dependente")
+                    
                     }
                     // Validação dos campos
                     
@@ -1202,7 +1206,7 @@ handlechangeCPF_procurador(e) {
             </th>
         <th>
         <Upload {...props}
-        data = {{'token': this.state.token, 'tp_form':'procuracao'}}
+        data = {{'token': this.state.token, 'tp_form':'procuracao.publica.dependente'}}
         >
       <Button icon={<UploadOutlined />}>Upload</Button>
     </Upload>
@@ -1216,7 +1220,7 @@ handlechangeCPF_procurador(e) {
             </th>
         <th>
         <Upload {...props}
-        data = {{'token': this.state.token, 'tp_form':'identificacao.cpf'}}
+        data = {{'token': this.state.token, 'tp_form':'doc.identificacao.cpf.procurador'}}
         >
       <Button icon={<UploadOutlined />}>Upload</Button>
     </Upload>
